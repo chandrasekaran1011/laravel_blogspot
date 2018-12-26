@@ -5,15 +5,9 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Create User</div>
 		<div class="panel-body">
-			@if(count($errors)>0)
-				<ul class="list-group">
-					@foreach($errors->all() as $error)
-						<li class="list-group-item" style="color:red;">{{$error}}</li>
-					@endforeach
-				</ul>
-			@endif
+			@include('includes.errors')
 
-			<form action="{{route('users.store')}}" method="post" enctype="multipart/form-data">
+			<form action="{{route('users.profile')}}" method="post" enctype="multipart/form-data">
 					{{csrf_field()}}
 				<div class="form-group">
 					<label for="name">Name</label>
@@ -24,6 +18,8 @@
 					<label for="email">Email</label>
 					<input type="email" name="email" class="form-control" value=""></input>
 				</div>
+
+	
 
 			
 				<div class="formgroup">

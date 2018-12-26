@@ -4,19 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\User;
-use App\Profile;
-Use Session;
+use User;
+use Auth;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
-
-
-    public function __construct() {
-
-    $this->middleware('admin');
-
-    }   
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admin.user.index')->with('users',User::all());
+       return view('admin.user.profile')->with('users',Auth::user());
     }
 
     /**
@@ -34,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.create');
+        //
     }
 
     /**
@@ -45,24 +37,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name'=>'required',
-            'email'=>'unique:users,email|required|email',
-        ]);
-
-        $user=User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt('password')
-        ]);
-
-        Profile::create(['user_id'=>$user->id,'avatar'=>'uploads/avatars/profile.png']);
-
-        Session::flash('success','New User added');
-
-        return redirect(route('users'));
-
-
+        //
     }
 
     /**
@@ -96,7 +71,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       $this->validate([$request,[
+        'name'=>'required',
+        'email'=>'unique:users,email|required|email',
+        'facebook'=>'required',
+        'youtube'=>'required',
+
+       ]]);
     }
 
     /**
@@ -108,29 +89,5 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function admin($id)
-    {
-        $user=User::find($id);
-        $user->admin=1;
-        $user->save();
-        
-        Session::flash('success','Permission changed to admin');
-
-        return redirect(route('users'));
-
-    }
-
-    public function not_admin($id)
-    {
-        $user=User::find($id);
-        $user->admin=0;
-        $user->save();
-        
-        Session::flash('success','Admin Permission taken');
-
-        return redirect(route('users'));
-
     }
 }

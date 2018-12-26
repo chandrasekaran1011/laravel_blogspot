@@ -79,16 +79,29 @@
                    <div class="col-lg-4">
                         <ul class="list-group">
                             <li class="list-group-item"><a href="/home">Home</a></li>
+
                             <li class="list-group-item"><a href="{{route('post.create')}}">Create new Post</a></li>
-                            <li class="list-group-item"><a href="{{route('posts')}}">View All Posts</a>
-                            <li class="list-group-item"><a href="{{route('category.create')}}">Create new Category</a>
-                            <li class="list-group-item"><a href="{{route('category.index')}}">View Category</a>
-                            <li class="list-group-item"><a href="{{route('posts.trashed')}}">View Trashed posts</a>
+
+                            <li class="list-group-item"><a href="{{route('posts')}}">View All Posts</a></li>
+
+                            <li class="list-group-item"><a href="{{route('category.create')}}">Create new Category</a></li>
+
+                            <li class="list-group-item"><a href="{{route('category.index')}}">View Category</a></li>
+
+                            <li class="list-group-item"><a href="{{route('posts.trashed')}}">View Trashed posts</a></li>
+
                             <li class="list-group-item"><a href="{{route('tags.create')}}">Create new Tags</a></li>
-                            <li class="list-group-item"><a href="{{route('tags')}}">View All Tags</a>                                
-                            </li>
+
+                            <li class="list-group-item"><a href="{{route('tags')}}">View All Tags</a></li>
+
+                            @if(Auth::user()->admin) 
                             <li class="list-group-item"><a href="{{route('users')}}">View Users</a></li>
+
                             <li class="list-group-item"><a href="{{route('users.create')}}">Create Users</a></li>
+
+                            <li class="list-group-item"><a href="{{route('users.profile')}}">Update Profile</a></li>
+
+                            @endif
                         </ul>
                    </div>
                  @endif
