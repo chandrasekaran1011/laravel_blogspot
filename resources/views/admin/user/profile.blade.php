@@ -28,7 +28,7 @@
 
 				<div class="form-group">
 					<label for="pass">New Password</label>
-					<input type="password" name="pass" class="form-control" value="" </input>
+					<input type="password" name="password" class="form-control" value="" />
 				</div>
 
 				<div class="form-group">

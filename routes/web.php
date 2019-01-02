@@ -11,17 +11,37 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/vpost/{slug}', 'FrontEndController@singlePost')->name('post.single');
+
+Route::get('/category/{id}', 'FrontEndController@categoryPost')->name('category.single');
+
+Route::get('/tag/{id}', 'FrontEndController@tagPost')->name('tag.single');
+
+Route::get('/results', function(){
+
+		$post=App\post::where('title','like','%'.request('query').'%')->get();
+
+		return view('results')->with('posts',$post)
+								->with('title',App\setting::first())
+    							->with('categories',App\category::all()->take(5))
+    							->with('query',request('query'));
+
 });
+
+
 
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'FrontEndController@index')->name('index');
 
 
 Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
+
+	Route::get('/home', function () {
+    return view('home');
+	})->name('home');
+
 
 	Route::get('/post/create/',[
 		'uses'=>'postsController@create',
@@ -164,6 +184,16 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 		'uses'=>'ProfileController@update',
 		'as'=>'users.update'
 	]);
+
+	Route::get('/setting/update',[
+		'uses'=>'SettingController@update',
+		'as'=>'setting.update'
+	])->middleware('admin');
+
+	Route::post('/setting/edit',[
+		'uses'=>'SettingController@edit',
+		'as'=>'setting.edit'
+	])->middleware('admin');
 
 
 

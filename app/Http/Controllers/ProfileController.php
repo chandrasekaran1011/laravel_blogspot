@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use User;
 use Auth;
+use Profile;
+use Session;
 
 class ProfileController extends Controller
 {
@@ -69,15 +71,59 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-       $this->validate([$request,[
-        'name'=>'required',
-        'email'=>'unique:users,email|required|email',
-        'facebook'=>'required',
-        'youtube'=>'required',
 
-       ]]);
+    public function update(Request $request)
+    {
+       $user=Auth::User();
+       $this->validate($request,[
+        'name'=>'required',
+        'email'=>'|required|email|unique:users,email,'.$user->id,
+        'facebook'=>'required|url',
+        'youtube'=>'required|url',
+
+       ]);
+
+      
+
+        if($request->has('password')){
+             $this->validate($request,[
+
+             'password'=>'alpha_dash|min:8'
+             ]);
+        
+
+
+            $user->password=bcrypt($request->password);
+
+        }
+
+
+       if($request->hasFile('avatar')){
+
+        $avatar=$request->avatar;
+        $new_name=time().$avatar->getClientOriginalName();
+
+        $avatar->move('/uploads/avatars',$new_name);
+
+        $user->profile->avatar='/uploads/avatars'.$new_name;
+
+        $user->profile->save();
+        }
+
+    $user->name=$request->name;
+    $user->email=$request->email;
+    $user->profile->about=$request->about;
+    $user->profile->facebook=$request->facebook;
+    $user->profile->youtube=$request->youtube;
+
+
+    $user->save();
+    $user->profile->save();
+
+    Session::flash('success','Profile edited');
+
+    return redirect(route('home'));
+
     }
 
     /**

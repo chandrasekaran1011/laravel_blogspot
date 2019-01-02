@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\post;
 use App\category;
 use App\Tag;
+use Auth;
 
 use Session;
 
@@ -17,6 +18,7 @@ class postsController extends Controller
     public function index()
     {
         
+
         $post=post::all();
         
         if($post->count()==0){
@@ -25,7 +27,15 @@ class postsController extends Controller
             return redirect()->back();
         }
         else{
-            return view('admin.posts.index')->with('posts',post::all());
+            $c=category::all()->count();
+            $t=Tag::all()->count();
+            if($c==0 || $t==0){
+                Session::flash('info','No category or Tag Found.');
+                return redirect()->back();
+             } 
+            else{
+                return view('admin.posts.index')->with('posts',post::all());
+            }
         }
     }    
 
@@ -38,8 +48,9 @@ class postsController extends Controller
     {
 
        $c=category::all()->count();
-       if($c==0){
-            Session::flash('info','No category Found.Create Category');
+       $t=Tag::all()->count();
+       if($c==0 || $t==0){
+            Session::flash('info','No category or Tag Found.');
             return redirect()->back();
        } 
        else{
@@ -57,7 +68,7 @@ class postsController extends Controller
      */
     public function store(Request $request)
     {
-
+        $id=Auth::id(); 
         $this->validate($request,[
             'title'=>'required',
             'featured'=>'required|image',
@@ -75,7 +86,9 @@ class postsController extends Controller
             'content'=>$request->content,
             'featured'=>'uploads/posts/'.$new_name,
             'category_id'=>$request->category,
-            'slug'=>str_slug($request->title)
+            'user_id'=>$id,
+            'slug'=>str_slug($request->title),
+            
         ]);
 
         $post->tags()->attach($request->tags);

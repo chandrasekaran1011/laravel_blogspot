@@ -7,7 +7,7 @@
 		<div class="panel-body">
 			@include('includes.errors')
 
-			<form action="{{route('users.profile')}}" method="post" enctype="multipart/form-data">
+			<form action="{{route('users.store')}}" method="post" enctype="multipart/form-data">
 					{{csrf_field()}}
 				<div class="form-group">
 					<label for="name">Name</label>

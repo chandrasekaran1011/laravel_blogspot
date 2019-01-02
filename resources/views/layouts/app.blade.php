@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/toastr.css') }}" rel="stylesheet">
+    @yield('styles')
 
 </head>
 <body>
@@ -101,7 +102,13 @@
 
                             <li class="list-group-item"><a href="{{route('users.profile')}}">Update Profile</a></li>
 
+                            <li class="list-group-item"><a href="{{route('setting.update')}}">Settings</a></li>
+
                             @endif
+
+
+
+
                         </ul>
                    </div>
                  @endif
@@ -119,7 +126,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/toastr.js') }}"></script>
-
+    @yield('scripts')
     <script>
         @if(Session::has('success'))
 

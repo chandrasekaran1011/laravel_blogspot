@@ -1,5 +1,20 @@
 @extends('layouts.app')
 
+@section('styles')
+	<link href="{{ asset('css/summernote.css') }}" rel="stylesheet">
+
+@stop
+
+@section('scripts')
+	<script src="{{ asset('js/summernote.js') }}"></script>
+	<script>
+		$(document).ready(function() {
+ 		$('#content').summernote();
+	});
+</script>
+
+@stop
+
 @section('content')
 
 	<div class="panel panel-default">
